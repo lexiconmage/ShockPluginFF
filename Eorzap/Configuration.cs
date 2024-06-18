@@ -2,13 +2,16 @@ using Dalamud.Configuration;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin;
+using Eorzap.Services;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Eorzap
 {
     [Serializable]
-    public class Configuration : IPluginConfiguration
+    public class Configuration : IPluginConfiguration, ISavable
     {
         public int Version { get; set; } = 0;
         public bool SomePropertyToBeSavedAndWithADefault { get; set; } = true;
@@ -54,18 +57,28 @@ namespace Eorzap
 
 
         // the below exist just to make saving less cumbersome
-        [NonSerialized]
-        private DalamudPluginInterface? PluginInterface;
+        [JsonIgnore]
+        private readonly SaveService _saveService;
 
-        public void Initialize(DalamudPluginInterface pluginInterface)
+        public Configuration(SaveService saveService)
         {
-            this.PluginInterface = pluginInterface;
+            _saveService = saveService;
         }
 
         public void Save()
         {
-            this.PluginInterface!.SavePluginConfig(this);
+            _saveService.DelaySave(this);
         }
+
+        public void Save(StreamWriter writer)
+        {
+            using var jWriter = new JsonTextWriter(writer) { Formatting = Formatting.Indented };
+            var serializer = new JsonSerializer { Formatting = Formatting.Indented };
+            serializer.Serialize(jWriter, this);
+        }
+
+        public string ToFilename(FilenameService fileNames)
+        => fileNames.ConfigFile;
 
 
         /// <summary>
