@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Dalamud.Plugin;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
+using Eorzap.Types;
 
 namespace Eorzap.Services
 {
@@ -33,15 +34,12 @@ namespace Eorzap.Services
 
         private void OnChatMessage(XivChatType type, uint senderId, ref SeString sender, ref SeString message, ref bool isHandled)
         {
-            // for now only check a message if in a FC
-            // Need to add a config file to check which chat to check
-
-            // Also need to check for the trigger word that is setup + Do the actual shock with
-            // the post request
-            _config.InfoChannel();
-            string[] Channels = _config.ChatName; //All the name of the channels that can be listened 
-            int index = Array.IndexOf(Channels, type.ToString());
-            if (index >= 0 && _config.ChannelBool[index] == true) //If the channel can be selected and is activated by the user
+            ChatType.ChatTypes? chatType = ChatType.GetChatTypeFromXivChatType(type);
+            if (chatType == null)
+            {
+                return;
+            }
+            if (_config.Channels.Contains(chatType.Value)) //If the channel can be selected and is activated by the user
             {
                 string keyword = _config.mainKeyWord.ToLower(); //Get the keyword
                 string[] triggers = _config.triggerWords;

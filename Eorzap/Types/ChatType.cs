@@ -1,3 +1,4 @@
+using Dalamud.Game.Text;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using System;
 using System.Collections.Generic;
@@ -98,7 +99,7 @@ namespace Eorzap.Types
 
         public static IEnumerable<ChatTypes> GetOrderedChannels()
         {
-            return Enum.GetValues(typeof(ChatType))
+            return Enum.GetValues(typeof(ChatTypes))
             .Cast<ChatTypes>()
             .Where(e => e != ChatTypes.Tell_In && e != ChatTypes.NoviceNetwork)
                     .OrderBy(e => GetOrder(e));
@@ -113,6 +114,39 @@ namespace Eorzap.Types
                 .FirstOrDefault() as EnumOrderAttribute;
             // return the order of the channel, or if it doesnt have one, return the max value
             return attribute?.Order ?? int.MaxValue;
+        }
+
+        public static ChatTypes? GetChatTypeFromXivChatType(XivChatType type)
+        {
+            return type switch
+            {
+                XivChatType.TellIncoming => ChatTypes.Tell,
+                XivChatType.TellOutgoing => ChatTypes.Tell,
+                XivChatType.Say => ChatTypes.Say,
+                XivChatType.Party => ChatTypes.Party,
+                XivChatType.Alliance => ChatTypes.Alliance,
+                XivChatType.Yell => ChatTypes.Yell,
+                XivChatType.Shout => ChatTypes.Shout,
+                XivChatType.FreeCompany => ChatTypes.FreeCompany,
+                XivChatType.NoviceNetwork => ChatTypes.NoviceNetwork,
+                XivChatType.Ls1 => ChatTypes.LS1,
+                XivChatType.Ls2 => ChatTypes.LS2,
+                XivChatType.Ls3 => ChatTypes.LS3,
+                XivChatType.Ls4 => ChatTypes.LS4,
+                XivChatType.Ls5 => ChatTypes.LS5,
+                XivChatType.Ls6 => ChatTypes.LS6,
+                XivChatType.Ls7 => ChatTypes.LS7,
+                XivChatType.Ls8 => ChatTypes.LS8,
+                XivChatType.CrossLinkShell1 => ChatTypes.CWL1,
+                XivChatType.CrossLinkShell2 => ChatTypes.CWL2,
+                XivChatType.CrossLinkShell3 => ChatTypes.CWL3,
+                XivChatType.CrossLinkShell4 => ChatTypes.CWL4,
+                XivChatType.CrossLinkShell5 => ChatTypes.CWL5,
+                XivChatType.CrossLinkShell6 => ChatTypes.CWL6,
+                XivChatType.CrossLinkShell7 => ChatTypes.CWL7,
+                XivChatType.CrossLinkShell8 => ChatTypes.CWL8,
+                _ => null
+            };
         }
     }
 }
