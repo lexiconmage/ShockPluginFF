@@ -1,15 +1,13 @@
 
 # Eorzap
-A simple Dalamud plugin used to link your Pishock shocker in FFXIV
+A simple Dalamud plugin used to link your PiShock shocker in FFXIV
 
-## How to install :
+## Repository
 
-* Navigate to /xlsettings
-  * paste the line https://raw.githubusercontent.com/lexiconmage/ShockPluginFF/master/repo.json in custom repositories plugin
-  * Hit save , then navigate to /xlplugins
-  * In all plugins search for Eorzap , hit install than enable
- 
-Voila ! The plugin should be installed and working in your game, now time to set it up.
+Add this as a custom repository:
+```
+https://raw.githubusercontent.com/lexiconmage/ShockPluginFF/master/repo.json
+```
 
 ## Setting it up
 
