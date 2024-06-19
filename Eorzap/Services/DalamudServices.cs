@@ -1,6 +1,5 @@
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using OtterGui.Classes;
 using OtterGui.Services;
 
 namespace Eorzap.Services
@@ -14,6 +13,7 @@ namespace Eorzap.Services
             services.AddDalamudService<ICommandManager>(pi);
             services.AddDalamudService<IChatGui>(pi);
             services.AddDalamudService<IFramework>(pi);
+            services.AddDalamudService<IPartyList>(pi);
         }
     }
 }

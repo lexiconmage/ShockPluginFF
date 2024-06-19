@@ -23,6 +23,7 @@ namespace Eorzap
                 _services.EnsureRequiredServices();
                 _services.GetService<WindowManager>();
                 _services.GetService<ZapCommandService>();
+                _services.GetService<ChatService>();
             }
             catch
             {

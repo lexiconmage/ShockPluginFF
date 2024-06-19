@@ -22,11 +22,11 @@ public class MainWindow : Window, IDisposable
 {
     private readonly ITab[] _tabs;
     public readonly ConfigSettingsTab Settings;
-    public readonly DefaultsTab Defaults;
+    public readonly InfoTab Defaults;
     public readonly TriggersTab Triggers;
     private Configuration _config;
 
-    public MainWindow(ConfigSettingsTab settings, DefaultsTab defaults, TriggersTab triggers, Configuration config) : base(
+    public MainWindow(ConfigSettingsTab settings, InfoTab defaults, TriggersTab triggers, Configuration config) : base(
         "EorZap", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
     {
         this.SizeConstraints = new WindowSizeConstraints

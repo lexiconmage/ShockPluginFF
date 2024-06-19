@@ -7,6 +7,7 @@ using Dalamud.Interface.Utility;
 using System.Numerics;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Eorzap.Types;
+using System.Linq;
 
 namespace Eorzap.Windows.Tabs
 {
@@ -36,26 +37,43 @@ namespace Eorzap.Windows.Tabs
             var spacing = ImGui.GetStyle().ItemInnerSpacing with { Y = ImGui.GetStyle().ItemInnerSpacing.Y };
             ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, spacing);
 
-            ImGui.Text("Api info:");
+            ImGui.Text("Api Info:");
             ImGui.Spacing();
             ImGui.Indent(30);
             var apiKey = _config.ApiKey;
-            ImGui.SetNextItemWidth(ImGuiHelpers.GlobalScale * 500);
-            if (ImGui.InputTextWithHint("##ApiKey", "ApiKey, found on your pishock profile", ref apiKey, 255))
+            ImGui.SetNextItemWidth(ImGuiHelpers.GlobalScale * 300);
+            if (ImGui.InputTextWithHint("##ApiKey", "PiShock Api Key", ref apiKey, 255))
             {
                 _config.ApiKey = apiKey;
+                _config.Save();
             }
+            if (ImGui.IsItemHovered())
+            {
+                ImGui.SetTooltip("This can be found on your PiShock profile.");
+            }
+
             var username = _config.ShockUsername;
-            ImGui.SetNextItemWidth(ImGuiHelpers.GlobalScale * 500);
-            if (ImGui.InputTextWithHint("##Username", "The username used on Pishock, case sensitive", ref username, 255))
+            ImGui.SetNextItemWidth(ImGuiHelpers.GlobalScale * 300);
+            if (ImGui.InputTextWithHint("##Username", "PiShock Username", ref username, 255))
             {
                 _config.ShockUsername = username;
+                _config.Save();
             }
+            if (ImGui.IsItemHovered())
+            {
+                ImGui.SetTooltip("The username is case sensitive.");
+            }
+
             var shockCode = _config.ShockerCode;
-            ImGui.SetNextItemWidth(ImGuiHelpers.GlobalScale * 500);
-            if (ImGui.InputTextWithHint("##Code", "Code for the shocker you want controlled, can be generated on the pishock page", ref shockCode, 255))
+            ImGui.SetNextItemWidth(ImGuiHelpers.GlobalScale * 300);
+            if (ImGui.InputTextWithHint("##Code", "PiShock Shocker Code", ref shockCode, 255))
             {
                 _config.ShockerCode = shockCode;
+                _config.Save();
+            }
+            if (ImGui.IsItemHovered())
+            {
+                ImGui.SetTooltip("Code for the specific shocker. This can be generated on the PiShock website.");
             }
             ImGui.Spacing();
             ImGui.Unindent(30);
@@ -72,7 +90,7 @@ namespace Eorzap.Windows.Tabs
                 // See if it is already enabled by default
                 var enabled = _config.Channels.Contains(e);
                 // Create a new line after every 4 columns
-                if (i != 0 && (i == 4 || i == 7 || i == 11 || i == 15 || i == 19))
+                if (i != 0 && (i == 4 || i == 7 || i == 11 || i == 15 || i == 19 || i == 23))
                 {
                     ImGui.NewLine();
                     //i = 0;
@@ -93,61 +111,22 @@ namespace Eorzap.Windows.Tabs
                 i++;
             }
 
-
             ImGui.Unindent(30);
             ImGui.EndGroup();
 
-            ImGui.Spacing();
-            ImGui.Text("Main Keyword to listen to:");
-            ImGui.Spacing();
+            ImGui.Separator();
 
-            var configKeyword = _config.mainKeyWord;
-            ImGui.SetNextItemWidth(ImGuiHelpers.GlobalScale * 230);
-            if (ImGui.InputText("Main Keyword", ref configKeyword, 255))
+            bool deathMode = _config.DeathMode;
+            if (ImGui.Checkbox("Death Mode", ref deathMode))
             {
-                _config.mainKeyWord = configKeyword;
+                _config.DeathMode = deathMode;
+                if (!deathMode)
+                {
+                    _config.DeathModeCount = 0;
+                }
                 _config.Save();
             }
-
         }
 
-        /// <summary>
-        /// Check that the value of the duration doesnt 
-        /// exceed the max Apishock value
-        /// </summary>
-        /// <param name="duration"> duration of a shock in seconds</param>
-        /// <returns>Duration of a shock in seconds</returns>
-        public int checkDuration(int duration)
-        {
-            if (duration < 0)
-            {
-                return duration = 0;
-            }
-            else if (duration > 15)
-            {
-                return duration = 15;
-            }
-            return duration;
-        }
-
-
-        /// <summary>
-        /// Check that the intensity isnt over the
-        /// api shock limite
-        /// </summary>
-        /// <param name="intensity">intensity of a shock</param>
-        /// <returns>Intensity of a shock inside the apishocks limits</returns>
-        public int checkIntensity(int intensity)
-        {
-            if (intensity < 0)
-            {
-                return intensity = 0;
-            }
-            else if (intensity > 100)
-            {
-                return intensity = 100;
-            }
-            return intensity;
-        }
     }
 }

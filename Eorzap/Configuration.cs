@@ -16,17 +16,16 @@ namespace Eorzap
     public class Configuration : IPluginConfiguration, ISavable
     {
         public int Version { get; set; } = 0;
-        public bool SomePropertyToBeSavedAndWithADefault { get; set; } = true;
         public string ApiKey { get; set; } = string.Empty;
         public string ShockerCode { get; set; } = string.Empty;
         public string ShockUsername { get; set; } = string.Empty;
         public string resultApiCall { get; set; } = string.Empty;
+        public bool DeathMode { get; set; } = false;
+        public int DeathModeCount { get; set; } = 0;
         public string MessageTest { get; set; } = "default";
-        public string mainKeyWord { get; set; }  = "null";
-        public string[] triggerWords { get; set; } = new string[] {"","","",""};
-        public int[] intensityArray { get; set; } = new int[] { 0, 0, 0, 0 };
-        public int[] durationArray { get; set; } = new int[] { 0, 0, 0, 0 };
+
         public List<ChatType.ChatTypes> Channels { get; set; }
+        public List<Trigger> Triggers { get; set; }
 
 
         // the below exist just to make saving less cumbersome
@@ -40,6 +39,10 @@ namespace Eorzap
             if (Channels == null)
             {
                 Channels = new List<ChatType.ChatTypes>();
+            }
+            if (Triggers == null)
+            {
+                Triggers = new List<Trigger>();
             }
         }
 

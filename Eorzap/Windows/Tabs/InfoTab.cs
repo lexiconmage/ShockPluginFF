@@ -6,11 +6,11 @@ using System.Numerics;
 
 namespace Eorzap.Windows.Tabs
 {
-    public class DefaultsTab : ITab
+    public class InfoTab : ITab
     {
         public Configuration _config;
-        public ReadOnlySpan<byte> Label => "Defaults"u8;
-        public DefaultsTab(Configuration config)
+        public ReadOnlySpan<byte> Label => "Info"u8;
+        public InfoTab(Configuration config)
         {
             _config = config;
         }
@@ -30,7 +30,16 @@ namespace Eorzap.Windows.Tabs
             var spacing = ImGui.GetStyle().ItemInnerSpacing with { Y = ImGui.GetStyle().ItemInnerSpacing.Y };
             ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, spacing);
 
-            ImGui.Spacing();
+            DrawApiConfig();
+            DrawApiResults();
+        }
+
+        private void DrawApiConfig()
+        {
+            if (!ImGui.CollapsingHeader("API Configuration"))
+            {
+                return;
+            }
             if (_config.ApiKey.Length > 0)
             {
                 ImGui.Text("Api Key is set");
@@ -46,7 +55,22 @@ namespace Eorzap.Windows.Tabs
                 ImGui.Text("Code is set");
                 ImGui.Spacing();
             }
-            ImGui.Text($"Last ApiCall answer: {_config.resultApiCall}");
+            ImGui.NewLine();
+        }
+        private void DrawApiResults()
+        {
+            if (!ImGui.CollapsingHeader("API Results"))
+            {
+                return;
+            }
+            if (_config.resultApiCall.Length > 0)
+            {
+                ImGui.Text($"Last ApiCall answer: {_config.resultApiCall}");
+            }
+            else
+            {
+                ImGui.Text("The PiShock API has not been called yet.");
+            }
         }
     }
 }

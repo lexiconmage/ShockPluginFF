@@ -10,19 +10,25 @@ using Dalamud.Plugin;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using Eorzap.Types;
+using System.Text.RegularExpressions;
+using OtterGui.Log;
+using Dalamud.Game.ClientState.Party;
 
 namespace Eorzap.Services
 {
     public class ChatService : IDisposable
     {
         private readonly IChatGui _chat;
+        private readonly IPartyList _party;
+        private readonly Logger _log;
         private Configuration _config;
 
-        public ChatService(Configuration config, IChatGui chat)
+        public ChatService(Configuration config, IChatGui chat, IPartyList party, Logger log)
         {
             _config = config;
             _chat = chat;
-
+            _party = party;
+            _log = log;
             _chat.ChatMessage += OnChatMessage;
 
         }
@@ -35,31 +41,88 @@ namespace Eorzap.Services
         private void OnChatMessage(XivChatType type, uint senderId, ref SeString sender, ref SeString message, ref bool isHandled)
         {
             ChatType.ChatTypes? chatType = ChatType.GetChatTypeFromXivChatType(type);
+            _log.Information(chatType == null ? "null" : chatType.ToString());
+            _log.Information(message.TextValue);
             if (chatType == null)
             {
                 return;
             }
             if (_config.Channels.Contains(chatType.Value)) //If the channel can be selected and is activated by the user
             {
-                string keyword = _config.mainKeyWord.ToLower(); //Get the keyword
-                string[] triggers = _config.triggerWords;
-                string[] triggersModifier = new string[triggers.Length]; //That way it does not modify the triggers value
-                for (int i = 0; i < triggers.Length; i++)
+                List<Trigger> triggers = _config.Triggers;
+                foreach (Trigger trigger in triggers)
                 {
-                    triggersModifier[i] = keyword + " " + triggers[i].ToLower(); //Put every keyword with the triggers like "testing trigger1"
-                }
-                int indexTrigger = Array.IndexOf(triggersModifier, message.ToString().ToLower());
-                if (indexTrigger >= 0 && triggersModifier[indexTrigger].Split(" ").Length > 1) //If the message correspond to an actual keyword + trigger combination
-                {
-                    //Get list of itensity and duration
-                    int[] intensity = _config.intensityArray;
-                    int[] duration = _config.durationArray;
-                    //Actual shock part
-                    // Call the shock with the duration and intensity for the keyword + trigger combination
-                    string jsonContent = $"{{ \"Username\": \"{_config.ShockUsername}\", \"Name\": \"{sender.ToString()}\",\"Code\":\"{_config.ShockerCode}\",\"Intensity\": {intensity[indexTrigger]},\"Duration\": {duration[indexTrigger]},\"ApiKey\":\"{_config.ApiKey}\",\"Op\":0 }}";
-                    _ = PostJsonData(jsonContent);
+                    if (trigger.Enabled && (trigger.Regex != null && trigger.Regex.IsMatch(message.TextValue)))
+                    {
+                        _log.Information($"Trigger {trigger.Name} triggered. Zap!");
+                        _ = PostPishockApi(sender.ToString(), trigger.Intensity, trigger.Duration);
+                    }
                 }
             }
+
+            if(Array.IndexOf(DeathMode.deathTypes, chatType) > -1 && _config.DeathMode)
+            {
+                HandleDeathMode(message.TextValue);
+            }
+        }
+
+        private void HandleDeathMode(string message)
+        {
+            if (DeathMode.DeathModeDieOtherRegex.IsMatch(message))
+            {
+                foreach (PartyMember member in _party)
+                {
+                    _log.Information(message);
+                    _log.Information(member.Name.TextValue);
+                    if (message.Contains(member.Name.TextValue))
+                    {
+                        _config.DeathModeCount++;
+                        int partysize = _party.Count;
+                        int duration = 15 * _config.DeathModeCount / partysize;
+                        int intensity = 100 * _config.DeathModeCount / partysize;
+                        _log.Information($"Duration: {duration}, Intensity: {intensity}.");
+                        _config.Save();
+                        _ = PostPishockApi("Death!", intensity, duration);
+                        return;
+                    }
+                }
+            }
+            if (DeathMode.DeathModeDieSelfRegex.IsMatch(message))
+            {
+                _config.DeathModeCount++;
+                int partysize = _party.Count;
+                int duration = 15 * _config.DeathModeCount / partysize;
+                int intensity = 100 * _config.DeathModeCount / partysize;
+                _log.Information($"Duration: {duration}, Intensity: {intensity}.");
+                _config.Save();
+                _ = PostPishockApi("Death!", intensity, duration);
+                return;
+            }
+            if (DeathMode.DeathModeLiveOtherRegex.IsMatch(message))
+            {
+                foreach (PartyMember member in _party)
+                {
+                    _log.Information(member.Name.TextValue);
+                    if (message.Contains(member.Name.TextValue))
+                    {
+                        _config.DeathModeCount--;
+                        _config.Save();
+                        return;
+                    }
+                }
+            }
+            if (DeathMode.DeathModeLiveSelfRegex.IsMatch(message))
+            {
+                _config.DeathModeCount--;
+                _config.Save();
+                return;
+            }
+        }
+
+        private async Task<bool> PostPishockApi(string sender, int intensity, int duration)
+        {
+            string jsonContent = $"{{ \"Username\": \"{_config.ShockUsername}\", \"Name\": \"{sender}\",\"Code\":\"{_config.ShockerCode}\",\"Intensity\": {intensity},\"Duration\": {duration},\"ApiKey\":\"{_config.ApiKey}\",\"Op\":0 }}";
+            return await PostJsonData(jsonContent);
         }
 
         public async Task<bool> PostJsonData(string jsonContent)

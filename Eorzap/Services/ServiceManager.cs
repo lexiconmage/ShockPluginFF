@@ -23,7 +23,7 @@ namespace Eorzap.Services
         public static OtterGui.Services.ServiceManager AddUi(this OtterGui.Services.ServiceManager services)
             => services.AddSingleton<WindowManager>()
                 .AddSingleton<MainWindow>()
-                .AddSingleton<DefaultsTab>()
+                .AddSingleton<InfoTab>()
                 .AddSingleton<ConfigSettingsTab>()
                 .AddSingleton<TriggersTab>();
 
