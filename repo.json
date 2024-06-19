@@ -5,7 +5,7 @@
     "Name": "EorZap",
     "Punchline": "Link your PiShock to FFXIV",
     "Description": "It shocks you or someone connected. Really, what did you expect?",
-    "AssemblyVersion": "0.5",
+    "AssemblyVersion": "0.5.1",
     "InternalName": "Eorzap",
     "RepoUrl": "https://github.com/lexiconmage/ShockPluginFF",
     "ApplicableVersion": "any",

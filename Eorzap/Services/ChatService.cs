@@ -41,8 +41,6 @@ namespace Eorzap.Services
         private void OnChatMessage(XivChatType type, uint senderId, ref SeString sender, ref SeString message, ref bool isHandled)
         {
             ChatType.ChatTypes? chatType = ChatType.GetChatTypeFromXivChatType(type);
-            _log.Information(chatType == null ? "null" : chatType.ToString());
-            _log.Information(message.TextValue);
             if (chatType == null)
             {
                 return;
