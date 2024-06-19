@@ -110,6 +110,7 @@ namespace Eorzap.Types
             return Enum.GetValues(typeof(ChatTypes))
             .Cast<ChatTypes>()
             .Where(e => e != ChatTypes.Tell_In && e != ChatTypes.NoviceNetwork)
+            .Where(e => GetOrder(e) >= 0)
                     .OrderBy(e => GetOrder(e));
         }
 

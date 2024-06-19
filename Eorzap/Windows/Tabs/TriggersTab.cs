@@ -28,7 +28,7 @@ namespace Eorzap.Windows.Tabs
         public void DrawContent()
         {
             var width = ImGui.GetContentRegionAvail().X;
-            using var child = ImRaii.Child("##DefaultsPanel", new Vector2(width, -1), true, ImGuiWindowFlags.NoScrollbar);
+            using var child = ImRaii.Child("##TriggersPanel", new Vector2(width, -1), true, ImGuiWindowFlags.NoScrollbar);
 
             var spacing = ImGui.GetStyle().ItemInnerSpacing with { Y = ImGui.GetStyle().ItemInnerSpacing.Y };
             ImRaii.PushStyle(ImGuiStyleVar.ItemSpacing, spacing);

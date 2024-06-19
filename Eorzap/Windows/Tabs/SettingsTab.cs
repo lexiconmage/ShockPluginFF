@@ -113,19 +113,6 @@ namespace Eorzap.Windows.Tabs
 
             ImGui.Unindent(30);
             ImGui.EndGroup();
-
-            ImGui.Separator();
-
-            bool deathMode = _config.DeathMode;
-            if (ImGui.Checkbox("Death Mode", ref deathMode))
-            {
-                _config.DeathMode = deathMode;
-                if (!deathMode)
-                {
-                    _config.DeathModeCount = 0;
-                }
-                _config.Save();
-            }
         }
 
     }

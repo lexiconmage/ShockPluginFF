@@ -25,7 +25,8 @@ namespace Eorzap.Services
                 .AddSingleton<MainWindow>()
                 .AddSingleton<InfoTab>()
                 .AddSingleton<ConfigSettingsTab>()
-                .AddSingleton<TriggersTab>();
+                .AddSingleton<TriggersTab>()
+                .AddSingleton<DefaultsTab>();
 
         public static OtterGui.Services.ServiceManager AddLogic(this OtterGui.Services.ServiceManager services)
             => services.AddSingleton<ZapCommandService>()

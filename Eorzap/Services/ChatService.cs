@@ -60,60 +60,61 @@ namespace Eorzap.Services
 
             if(Array.IndexOf(DeathMode.deathTypes, chatType) > -1 && _config.DeathMode)
             {
-                HandleDeathMode(message.TextValue);
+                HandleDeathMode(chatType.Value, message.TextValue);
             }
         }
 
-        private void HandleDeathMode(string message)
+        private void HandleDeathMode(ChatType.ChatTypes type, string message)
         {
-            if (DeathMode.DeathModeDieOtherRegex.IsMatch(message))
+            int partysize, intensity, duration;
+            switch (type)
             {
-                foreach (PartyMember member in _party)
-                {
-                    _log.Information(message);
-                    _log.Information(member.Name.TextValue);
-                    if (message.Contains(member.Name.TextValue))
+                case ChatType.ChatTypes.DeathOther:
+                    foreach (PartyMember member in _party)
                     {
-                        _config.DeathModeCount++;
-                        int partysize = _party.Count;
-                        int duration = 15 * _config.DeathModeCount / partysize;
-                        int intensity = 100 * _config.DeathModeCount / partysize;
-                        _log.Information($"Duration: {duration}, Intensity: {intensity}.");
-                        _config.Save();
-                        _ = PostPishockApi("Death!", intensity, duration);
-                        return;
+                        _log.Information(message);
+                        _log.Information(member.Name.TextValue);
+                        if (message.Contains(member.Name.TextValue))
+                        {
+                            _config.DeathModeCount++;
+                            partysize = _party.Count;
+                            duration = 15 * _config.DeathModeCount / partysize;
+                            intensity = 100 * _config.DeathModeCount / partysize;
+                            _log.Information($"Duration: {duration}, Intensity: {intensity}.");
+                            _config.Save();
+                            _ = PostPishockApi("Death!", intensity, duration);
+                            return;
+                        }
                     }
-                }
-            }
-            if (DeathMode.DeathModeDieSelfRegex.IsMatch(message))
-            {
-                _config.DeathModeCount++;
-                int partysize = _party.Count;
-                int duration = 15 * _config.DeathModeCount / partysize;
-                int intensity = 100 * _config.DeathModeCount / partysize;
-                _log.Information($"Duration: {duration}, Intensity: {intensity}.");
-                _config.Save();
-                _ = PostPishockApi("Death!", intensity, duration);
-                return;
-            }
-            if (DeathMode.DeathModeLiveOtherRegex.IsMatch(message))
-            {
-                foreach (PartyMember member in _party)
-                {
-                    _log.Information(member.Name.TextValue);
-                    if (message.Contains(member.Name.TextValue))
+                    break;
+                case ChatType.ChatTypes.DeathSelf:
+                    _config.DeathModeCount++;
+                    partysize = _party.Count;
+                    duration = 15 * _config.DeathModeCount / partysize;
+                    intensity = 100 * _config.DeathModeCount / partysize;
+                    _log.Information($"Duration: {duration}, Intensity: {intensity}.");
+                    _config.Save();
+                    _ = PostPishockApi("Death!", intensity, duration);
+                    return;
+
+                case ChatType.ChatTypes.ReviveOther:
+                    foreach (PartyMember member in _party)
                     {
-                        _config.DeathModeCount--;
-                        _config.Save();
-                        return;
+                        _log.Information(member.Name.TextValue);
+                        if (message.Contains(member.Name.TextValue))
+                        {
+                            _config.DeathModeCount--;
+                            _config.Save();
+                            return;
+                        }
                     }
-                }
-            }
-            if (DeathMode.DeathModeLiveSelfRegex.IsMatch(message))
-            {
-                _config.DeathModeCount--;
-                _config.Save();
-                return;
+                    break;
+                case ChatType.ChatTypes.ReviveSelf:
+                    _config.DeathModeCount--;
+                    _config.Save();
+                    return;
+                default:
+                    break;
             }
         }
 

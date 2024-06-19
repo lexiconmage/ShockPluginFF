@@ -22,11 +22,12 @@ public class MainWindow : Window, IDisposable
 {
     private readonly ITab[] _tabs;
     public readonly ConfigSettingsTab Settings;
-    public readonly InfoTab Defaults;
+    public readonly InfoTab Info;
     public readonly TriggersTab Triggers;
+    public readonly DefaultsTab Defaults;
     private Configuration _config;
 
-    public MainWindow(ConfigSettingsTab settings, InfoTab defaults, TriggersTab triggers, Configuration config) : base(
+    public MainWindow(ConfigSettingsTab settings, InfoTab info, TriggersTab triggers, DefaultsTab defaults, Configuration config) : base(
         "EorZap", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
     {
         this.SizeConstraints = new WindowSizeConstraints
@@ -35,11 +36,13 @@ public class MainWindow : Window, IDisposable
             MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
         };
         Settings = settings;
-        Defaults = defaults;
+        Info = info;
         Triggers = triggers;
+        Defaults = defaults;
         _tabs =
         [
             settings,
+            info,
             defaults,
             triggers
         ];
