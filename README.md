@@ -1,38 +1,23 @@
 
 # Eorzap
-A simple Dalamund plugin used to link your Pishock shocker FFXIV
-Meant to be used with the amazing animation mods : [Remote Shock Collar [Animation] [NSFW]](https://www.xivmodarchive.com/modid/89985) for more immersion, but can work without it
+A simple Dalamud plugin used to link your PiShock shocker in FFXIV
 
+## Repository
 
-## How does it works
-You can set up listeners to different kind of chats(Freecompany,say, part ect...) To do so you need to set up a Main keywords as well as up to 4 triggers.
-Each trigger can be set up with a different intensity and duration. 
-To be triggered one Message must be composed of only the Keyword and the trigger word, let takes for exemple the case that is showcased later our main Keyword will be "Testing" and ours first trigger will be "nervous". To trigger the shock that is linked to that trigger, trigger 1 you must receive a message containing "Testing nervous" if it has any less or more letters it wont trigger, the text is non case sensitive. Only putting "Testing" or "nervous" in the chat wont trigger a shock.
-
-## How to install :
-
-* Navigate to /xlsettings
-  * paste the line https://raw.githubusercontent.com/BeldaFr/ShockPluginFF/master/repo.json in custom repositories plugin
-  * Hit save , then navigate to /xlplugins
-  * In all plugins search for Eorzap , hit install than enable
- 
-Voila ! The plugin should be installed and working in your game, now time to set it up.
+Add this as a custom repository:
+```
+https://raw.githubusercontent.com/lexiconmage/ShockPluginFF/master/repo.json
+```
 
 ## Setting it up
 
-* /eorzap open the main windows from there you can open the settings and see the last response from the Pishock Api
-    * Enter your personnal ApiKey, shocker code and username from the Pishock site
-  ![Settings screenshot](https://github.com/BeldaFr/ShockPluginFF/blob/master/doc/Settings.png?raw=true)
+* Enter the three pieces of information necessary to connect to the PiShock servers on the 'Settings' tab (Api Key, Username, Shocker Code)
+You can also select which channels that the plugin will listen on in the same tab. 
 
-* Then check the type of chat you want the keywords and trigger to listen to, on that exemple we can see that a shock will be trigger if one of the Keyword + trigger is posted to the party chat,Fc chat, Tell and CrossWorlLinkShell1.
+* Triggers can be added in the triggers tab. To add a trigger, click the + button, then fill out the Regex (which requires a regular expression), Duration, and Intensity fields, and ensure that it is enabled. 
 
-  /!\ If you are testing with Tell, the keywords only works when you receive a tell and not send one, it should work both ways on all other chats
-    * Now chose your main Keyword, be careful to not have any empty space before or after it
-    * Then add as up to 4 triggers if you feel like it, dont forget to give them all a duration and intensity !
+* The 'Death Mode' button can be enabled for a dynamic experience while gaming. It will deliver scaled shocks to you every time a party member dies, scaling with the number of currently-dead members until a maximum duration of 15 seconds and intensity of 100.
 
-  Then you should be all set, to try it I recommend sending the message in a private linkshell if you are alone, if you have someone else with you have them send the keyword +  trigger of your choice in on of your selected channel.
-  If there is any problem you can check the last PishockApi response on the main window of /eorzap
-  
 
-## Disclaimer
-I'm only a student in programming and had no experience in C# before, so the code might be amateurish and not up to the highest standars, so feel free to improve on it for your owns needs, just credit me if you reuse it for another public project is all I ask, otherwise, have fun !
+## Credit
+Credit to Cordelia for her endlessly useful plugin Gagspeak, both as a reference for much of the rewritten UI and for the tool, and to Belda for making the initial version.

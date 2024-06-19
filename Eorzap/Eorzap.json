@@ -1,8 +1,8 @@
 {
-  "Author": "Belda",
-  "Name": "Eorzap",
-  "Punchline": "Link your pishock to FFXIV",
-  "Description": "use /eorzap to set it up",
+  "Author": "Misty",
+  "Name": "EorZap",
+  "Punchline": "Link your PiShock to FFXIV",
+  "Description": "It shocks you or someone connected. Really, what did you expect?",
   "InternalName": "Eorzap",
   "ApplicableVersion": "any",
   "Tags": [

@@ -1,26 +1,49 @@
 using System;
 using System.Numerics;
 using Dalamud.Interface.Internal;
+using Dalamud.Interface.Internal.Windows.Settings;
 using Dalamud.Interface.Windowing;
+using Eorzap.Windows.Tabs;
 using FFXIVClientStructs.FFXIV.Common.Configuration;
 using ImGuiNET;
+using OtterGui.Widgets;
 
 namespace Eorzap.Windows;
 
+public enum TabType
+{
+    None = -1,
+    Settings = 0,
+    Defaults = 1,
+    Triggers = 2
+}
+
 public class MainWindow : Window, IDisposable
 {
-    private Plugin Plugin;
+    private readonly ITab[] _tabs;
+    public readonly ConfigSettingsTab Settings;
+    public readonly InfoTab Defaults;
+    public readonly TriggersTab Triggers;
+    private Configuration _config;
 
-    public MainWindow(Plugin plugin) : base(
-        "Eorzap Main window", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
+    public MainWindow(ConfigSettingsTab settings, InfoTab defaults, TriggersTab triggers, Configuration config) : base(
+        "EorZap", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoScrollWithMouse)
     {
         this.SizeConstraints = new WindowSizeConstraints
         {
             MinimumSize = new Vector2(375, 330),
             MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
         };
-
-        this.Plugin = plugin;
+        Settings = settings;
+        Defaults = defaults;
+        Triggers = triggers;
+        _tabs =
+        [
+            settings,
+            defaults,
+            triggers
+        ];
+        _config = config;
     }
 
     public void Dispose()
@@ -30,28 +53,12 @@ public class MainWindow : Window, IDisposable
     public override void Draw()
     {
 
-        ImGui.Spacing();
-        if (this.Plugin.Configuration.ApiKey.Length > 0)
+        if (TabBar.Draw("##tabs", ImGuiTabBarFlags.None, _tabs))
         {
-            ImGui.Text("Api Key is set");
-            ImGui.Spacing();
-        }
-        if(this.Plugin.Configuration.ShockUsername.Length > 0)
-        {
-            ImGui.Text("Username is set");
-            ImGui.Spacing();
-        }
-        if (this.Plugin.Configuration.ShockerCode.Length > 0)
-        {
-            ImGui.Text("Code is set");
-            ImGui.Spacing();
-        }
-        ImGui.Text($"Last ApiCall answer: {this.Plugin.Configuration.resultApiCall}");
 
-        if (ImGui.Button("Show Settings"))
-        {
-            this.Plugin.DrawConfigUI();
         }
+        
+
 
     }
 }
