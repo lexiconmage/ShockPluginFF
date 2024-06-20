@@ -101,6 +101,8 @@ namespace Eorzap.Types
             ReviveOther = 4154,
             [EnumOrder(-3)]
             DeathSelf = 2234,
+            [EnumOrder(-5)]
+            DeathSelf2 = 2874,
             [EnumOrder(-4)]
             ReviveSelf = 2106
         }

@@ -15,6 +15,7 @@ namespace Eorzap.Types
         public static ChatType.ChatTypes[] deathTypes = [
             ChatType.ChatTypes.DeathOther,
             ChatType.ChatTypes.DeathSelf,
+            ChatType.ChatTypes.DeathSelf2,
             ChatType.ChatTypes.ReviveOther,
             ChatType.ChatTypes.ReviveSelf
         ];

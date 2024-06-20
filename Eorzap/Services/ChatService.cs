@@ -22,6 +22,7 @@ namespace Eorzap.Services
         private readonly IPartyList _party;
         private readonly Logger _log;
         private Configuration _config;
+        private int DeathModeCount = 0;
 
         public ChatService(Configuration config, IChatGui chat, IPartyList party, Logger log)
         {
@@ -76,24 +77,23 @@ namespace Eorzap.Services
                         _log.Information(member.Name.TextValue);
                         if (message.Contains(member.Name.TextValue))
                         {
-                            _config.DeathModeCount++;
+                            DeathModeCount++;
                             partysize = _party.Count;
-                            duration = 15 * _config.DeathModeCount / partysize;
-                            intensity = 100 * _config.DeathModeCount / partysize;
+                            duration = _config.DeathModeSettings[2] * DeathModeCount / partysize;
+                            intensity = _config.DeathModeSettings[1] * DeathModeCount / partysize;
                             _log.Information($"Duration: {duration}, Intensity: {intensity}.");
-                            _config.Save();
                             _ = PostPishockApi("Death!", intensity, duration);
                             return;
                         }
                     }
                     break;
                 case ChatType.ChatTypes.DeathSelf:
-                    _config.DeathModeCount++;
+                case ChatType.ChatTypes.DeathSelf2:
+                    DeathModeCount++;
                     partysize = _party.Count;
-                    duration = 15 * _config.DeathModeCount / partysize;
-                    intensity = 100 * _config.DeathModeCount / partysize;
+                    duration = _config.DeathModeSettings[2] * DeathModeCount / partysize;
+                    intensity = _config.DeathModeSettings[1] * DeathModeCount / partysize;
                     _log.Information($"Duration: {duration}, Intensity: {intensity}.");
-                    _config.Save();
                     _ = PostPishockApi("Death!", intensity, duration);
                     return;
 
@@ -103,15 +103,13 @@ namespace Eorzap.Services
                         _log.Information(member.Name.TextValue);
                         if (message.Contains(member.Name.TextValue))
                         {
-                            _config.DeathModeCount--;
-                            _config.Save();
+                            DeathModeCount--;
                             return;
                         }
                     }
                     break;
                 case ChatType.ChatTypes.ReviveSelf:
-                    _config.DeathModeCount--;
-                    _config.Save();
+                    DeathModeCount--;
                     return;
                 default:
                     break;

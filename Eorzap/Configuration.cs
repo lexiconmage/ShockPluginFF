@@ -21,7 +21,7 @@ namespace Eorzap
         public string ShockUsername { get; set; } = string.Empty;
         public string resultApiCall { get; set; } = string.Empty;
         public bool DeathMode { get; set; } = false;
-        public int DeathModeCount { get; set; } = 0;
+        public int[] DeathModeSettings { get; set; } = [0, 100, 15];
         public string MessageTest { get; set; } = "default";
 
         public List<ChatType.ChatTypes> Channels { get; set; }

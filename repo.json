@@ -15,7 +15,7 @@
     "LastUpdate": 0,
     "LoadPriority": 0,
     "DownloadLinkInstall": "https://github.com/lexiconmage/ShockPluginFF/releases/latest/download/Eorzap.zip",
-    "DownloadLinkTesting": "https://github.com/lexiconmage/ShockPluginFF/releases/latest/download/Eorzap.zip",
+    "DownloadLinkTesting": "https://github.com/lexiconmage/ShockPluginFF/releases/tag/v0.5.2-beta",
     "DownloadLinkUpdate": "https://github.com/lexiconmage/ShockPluginFF/releases/latest/download/Eorzap.zip",
     "IconUrl": "https://raw.githubusercontent.com/BeldaFr/ShockPluginFF/master/doc/pishock.jpg",
     "Tags": [

@@ -1,3 +1,4 @@
+using Eorzap.Types;
 using ImGuiNET;
 using OtterGui.Raii;
 using OtterGui.Widgets;
@@ -37,13 +38,22 @@ namespace Eorzap.Windows.Tabs
             if (ImGui.Checkbox("Death Mode", ref deathMode))
             {
                 _config.DeathMode = deathMode;
-                if (!deathMode)
-                {
-                    _config.DeathModeCount = 0;
-                }
                 _config.Save();
             }
             ImGui.NewLine();
+            if (deathMode)
+            {
+                var DeathModeSettings = _config.DeathModeSettings;
+                if (ImGui.ListBox("Mode##dscale", ref DeathModeSettings[0], ["Shock", "Vibrate", "Beep"], 3))
+                {
+                    _config.DeathModeSettings = DeathModeSettings;
+                    _config.Save();
+                }
+                ImGui.SliderInt("Max Intensity##dscaleInt", ref DeathModeSettings[1], 1, 100);
+                ImGui.SliderInt("Max Duration##dscaleDur", ref DeathModeSettings[2], 1, 15);
+                ImGui.Spacing();
+                ImGui.Spacing();
+            }
         }
     }
 }
