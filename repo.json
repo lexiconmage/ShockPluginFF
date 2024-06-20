@@ -5,7 +5,7 @@
     "Name": "EorZap",
     "Punchline": "Link your PiShock to FFXIV",
     "Description": "It shocks you or someone connected. Really, what did you expect?",
-    "AssemblyVersion": "0.5.1",
+    "AssemblyVersion": "0.5.2",
     "InternalName": "Eorzap",
     "RepoUrl": "https://github.com/lexiconmage/ShockPluginFF",
     "ApplicableVersion": "any",
@@ -15,7 +15,7 @@
     "LastUpdate": 0,
     "LoadPriority": 0,
     "DownloadLinkInstall": "https://github.com/lexiconmage/ShockPluginFF/releases/latest/download/Eorzap.zip",
-    "DownloadLinkTesting": "https://github.com/lexiconmage/ShockPluginFF/releases/latest/download/Eorzap.zip",
+    "DownloadLinkTesting": "https://github.com/lexiconmage/ShockPluginFF/releases/download/v0.5.2-beta/Eorzap.zip",
     "DownloadLinkUpdate": "https://github.com/lexiconmage/ShockPluginFF/releases/latest/download/Eorzap.zip",
     "IconUrl": "https://raw.githubusercontent.com/BeldaFr/ShockPluginFF/master/doc/pishock.jpg",
     "Tags": [
